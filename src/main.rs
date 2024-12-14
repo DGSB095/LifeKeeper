@@ -6,15 +6,16 @@ mod ui;
 mod utils;
 
 use chrono::NaiveDate;
+use serde_json::to_string;
 use tasks::{TaskManager, Task};
 
 fn main() {
+    // tasks system test and example
     let mut task_manager = TaskManager::new();
 
     // Добавление задач
-    let time = NaiveDate::from_ymd_opt(2024, 12, 20);
-    task_manager.add_task("Complete the project".to_string(), NaiveDate::from_ymd_opt(2024, 12, 20))  ;
-    task_manager.add_task("Check email".to_string(), None);
+    task_manager.add_task("Complete the project".to_string(), NaiveDate::from_ymd_opt(2024, 12, 20), 1)  ;
+    task_manager.add_task("Check email".to_string(), None,0);
 
     // Получение всех задач
     let tasks = task_manager.get_all_tasks();

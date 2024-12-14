@@ -4,17 +4,21 @@ use chrono::{NaiveDate, Local};
 pub struct Task {
     id: u32,
     title: String,
+    time_limit:Option<bool>,
     due_date: Option<chrono::NaiveDate>,
+    task_type: u16,
     completed: bool,
 }
 
 impl Task {
     // Создание новой задачи
-    pub fn new(id: u32, title: String, due_date: Option<NaiveDate>) -> Self {
+    pub fn new(id: u32, title: String,time_limit:Option<bool>, due_date: Option<NaiveDate>, task_type:u16) -> Self {
         Self {
             id,
             title,
+            time_limit,
             due_date,
+            task_type,//0 - standart_type, 1 - bill_connected_type, 2 - everyday_type
             completed: false,
         }
     }
@@ -37,8 +41,13 @@ impl  TaskManager {
         }
     }
 
-    pub fn add_task(&mut self, title: String, due_date: Option<NaiveDate>) -> Task {
-        let task = Task::new(self.next_id, title, due_date);
+    pub fn add_task(&mut self, title: String, time_limit:Option<bool>, due_date: Option<NaiveDate>, task_type: u16) -> Task {
+        if time_limit.is_none() != true
+        {
+            eprint!("AHHHHHH NO DUE_DATE");
+            std::process::abort();
+        }
+        let task = Task::new(self.next_id, title, time_limit, due_date, task_type);
         self.tasks.push(task.clone());
         self.next_id += 1;
         task
