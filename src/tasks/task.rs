@@ -42,6 +42,7 @@ impl  TaskManager {
     }
 
     pub fn add_task(&mut self, title: String, time_limit:Option<bool>, due_date: Option<NaiveDate>, task_type: u16) -> Task {
+        println!("{}", time_limit.is_none());
         if time_limit.is_none() != true
         {
             eprint!("AHHHHHH NO DUE_DATE");

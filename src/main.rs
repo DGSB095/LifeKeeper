@@ -14,8 +14,8 @@ fn main() {
     let mut task_manager = TaskManager::new();
 
     // Добавление задач
-    task_manager.add_task("Complete the project".to_string(), NaiveDate::from_ymd_opt(2024, 12, 20), 1)  ;
-    task_manager.add_task("Check email".to_string(), None,0);
+    task_manager.add_task("Complete the project".to_string(), Some(true), NaiveDate::from_ymd_opt(2024, 12, 20), 1)  ;
+    task_manager.add_task("Check email".to_string(), None, None, 0);
 
     // Получение всех задач
     let tasks = task_manager.get_all_tasks();
