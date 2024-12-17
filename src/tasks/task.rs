@@ -67,4 +67,11 @@ impl  TaskManager {
     pub fn remove_task(&mut self, task_id: u32) {
         self.tasks.retain(|task| task.id != task_id);
     }
+
+    pub fn get_tasks_by_type(&mut self, task_type: u16) - > Vec<Task>
+    {
+        self.tasks.iter().filter(|task| task.task_type == task_type)
+		.cloned()
+		.collect()
+    }
 }
