@@ -1,8 +1,11 @@
 from task import *
+from fastapi import  FastAPI
 
 #sections = ["Buy milk", "watch arcane", "idk", "BRUH", "EHM Rust is better"]
 tmanager_path = ""
 tmanager = TaskManager([], [], 0)
+# app = FastAPI()
+
 
 def add_new_task():
     content = input("Введите описание задачи: ")
@@ -162,3 +165,7 @@ while True:
             break
         case _:
             print("Please choose an option")
+
+# @app.get("/sections/{section_name}")
+# def print_section(section_name:str):
+#     return {"section_name": section_name}
