@@ -1,66 +1,57 @@
 import json
 import pathlib
 import sqlite3
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
+from typing import List, Optional
 
-class Task:
-    def __init__(self,id=0, completed=False,content="",section=0,due_date="",should_repeat=False, delete_on_complete=True):
-        self.id = id
-        self.content = content
-        self.section = section
-        self.due_date = due_date
-        self.should_repeat = should_repeat
-        self.completed = completed
-        self.delete_on_complete = delete_on_complete
+app = FastAPI()
 
-    def complete(self):
-        self.completed = True
+class Task(BaseModel):
+    id: int
+    content: str
+    section: int
+    due_date: Optional[str] = None
+    should_repeat: Optional[str] = None
+    completed: bool = False
+    delete_on_complete: bool = True
+
+class Section(BaseModel):
+    name: str
 
 class TaskManager:
-    def __init__(self, tasks=[],sections=[],next_id=0):
-        self.tasks=tasks
-        self.sections=sections
-        self.next_id=next_id
+    def __init__(self):
+        self.tasks = []
+        self.sections = []
+        self.next_id = 0
 
-    def add_task(self,completed,content,section,due_date,should_repeat,delete_on_complete):
-        self.tasks.append(Task(self.next_id,False,content,section,due_date,should_repeat,delete_on_complete))
+    def add_task(self, task: Task):
+        self.tasks.append(task)
         self.next_id += 1
 
-    def remove_task(self, id):
-        for task in self.tasks:
-            if task.id == id:
-                self.tasks.remove(task)
+    def remove_task(self, id: int):
+        self.tasks = [task for task in self.tasks if task.id != id]
 
-    def get_task(self, id):
+    def get_task(self, id: int) -> Optional[Task]:
         for task in self.tasks:
             if task.id == id:
                 return task
+        return None
 
-    def get_tasks_by_section(self, section):
-        return [task for task in self.tasks if task.section == section]
-
-    def get_tasks(self):
+    def get_tasks(self) -> List[Task]:
         return self.tasks
 
-    def edit_task(self, id, content, section, due_date, should_repeat, delete_on_complete):
-        for task in self.tasks:
-            if task.id == id:
-                task.content = content
-                task.section = section
-                task.due_date = due_date
-                task.should_repeat = should_repeat
-                task.delete_on_complete = delete_on_complete
-
-    def add_section(self, section):
+    def add_section(self, section: str):
         if section not in self.sections:
             self.sections.append(section)
-        else:
-            return False
 
-    def remove_section(self, section_id):
-        self.sections.pop(section_id)
+    def remove_section(self, section_id: int):
+        if 0 <= section_id < len(self.sections):
+            self.sections.pop(section_id)
 
-    def edit_section(self, section_id, new_section):
-        self.sections[section_id] = new_section
+    def edit_section(self, section_id: int, new_section: str):
+        if 0 <= section_id < len(self.sections):
+            self.sections[section_id] = new_section
 
     def read_data_from_tmanager_file(self, path_to_vault):
         dotlifekeeper_path = path_to_vault + "/.lifekeeper"
@@ -118,17 +109,69 @@ class TaskManager:
         tmanager_conn = sqlite3.connect(dotlifekeeper_path + "/tmanager.db")
         cursor = tmanager_conn.cursor()
 
+        # Clear existing data
         cursor.execute("DELETE FROM Sections")
         cursor.execute("DELETE FROM Tasks")
 
+        # Insert sections
         for section in self.sections:
             cursor.execute("INSERT INTO Sections (section_name) VALUES (?)", (section,))
 
+        # Insert tasks
         for task in self.tasks:
-            cursor.execute('''INSERT INTO Tasks (task_id, completed, task_name, task_content, section_id, due_date, should_repeat, delete_on_complete)
-                                      VALUES (?, ?, ?, ?, ?, ?, ?, ?)''',
+            cursor.execute('''INSERT OR REPLACE INTO Tasks (task_id, completed, task_name, task_content, section_id, due_date, should_repeat, delete_on_complete)
+                              VALUES (?, ?, ?, ?, ?, ?, ?, ?)''',
                            (task.id, task.completed, task.content, task.content, task.section, task.due_date,
                             task.should_repeat, task.delete_on_complete))
 
         tmanager_conn.commit()
         tmanager_conn.close()
+
+tmanager = TaskManager()
+
+@app.post("/tasks/")
+def create_task(task: Task):
+    tmanager.add_task(task)
+    return task
+
+@app.get("/tasks/", response_model=List[Task])
+def read_tasks():
+    return tmanager.get_tasks()
+
+@app.get("/tasks/{task_id}", response_model=Task)
+def read_task(task_id: int):
+    task = tmanager.get_task(task_id)
+    if task is None:
+        raise HTTPException(status_code=404, detail="Task not found")
+    return task
+
+@app.delete("/tasks/{task_id}")
+def delete_task(task_id: int):
+    task = tmanager.get_task(task_id)
+    if task is None:
+        raise HTTPException(status_code=404, detail="Task not found")
+    tmanager.remove_task(task_id)
+    return {"detail": "Task deleted"}
+
+@app.post("/sections/")
+def create_section(section: Section):
+    tmanager.add_section(section.name)
+    return section
+
+@app.get("/sections/", response_model=List[str])
+def read_sections():
+    return tmanager.sections
+
+@app.delete("/sections/{section_id}")
+def delete_section(section_id: int):
+    if section_id >= len(tmanager.sections) or section_id < 0:
+        raise HTTPException(status_code=404, detail="Section not found")
+    tmanager.remove_section(section_id)
+    return {"detail": "Section deleted"}
+
+@app.put("/sections/{section_id}")
+def update_section(section_id: int, section: Section):
+    if section_id >= len(tmanager.sections) or section_id < 0:
+        raise HTTPException(status_code=404, detail="Section not found")
+    tmanager.edit_section(section_id, section.name)
+    return section

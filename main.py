@@ -3,7 +3,7 @@ from fastapi import  FastAPI
 
 #sections = ["Buy milk", "watch arcane", "idk", "BRUH", "EHM Rust is better"]
 tmanager_path = ""
-tmanager = TaskManager([], [], 0)
+tmanager = TaskManager()
 # app = FastAPI()
 
 
@@ -12,14 +12,15 @@ def add_new_task():
     print("Выберите раздел: ")
     for index, section in enumerate(tmanager.sections, 1):
         print(f"{index}. {section}")
-    section = int(input("Введите номер раздела (или пустым, если нет): "))
+    section_input = input("Введите номер раздела (или пустым, если нет): ")
+    section = int(section_input) if section_input else 0
     due_date = input("Установить дату выполнения (ДД.ММ.ГГГГ) или оставить пустым: ")
     should_repeat = input("Повторять задачу? (число/ничего): ")
     delete_on_complete = input("Удалить задачу после завершения? (Y/N): ")
     if delete_on_complete.lower() == "y":
-        tmanager.add_task(False, content, section, due_date, should_repeat,True)
+        tmanager.add_task(False, content, section, due_date, should_repeat, True)
     else:
-        tmanager.add_task(False, content, section, due_date, should_repeat,False)
+        tmanager.add_task(False, content, section, due_date, should_repeat, False)
     tmanager.write_data_to_tmanager_file(tmanager_path)
 
 
