@@ -2,10 +2,10 @@ import sys
 import os
 import pytest
 
-# Add the directory containing task.py to the Python path
+# Add the directory containing task_manager.py to the Python path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from task import Task, TaskManager
+from task_manager import Task, TaskManager
 
 @pytest.fixture(autouse=True)
 def setup_tmanager():

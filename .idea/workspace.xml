@@ -7,6 +7,8 @@
     <list default="true" id="56c31615-c1dc-4b75-bc2d-97ff68085217" name="Changes" comment="Added some functional, also fixed bugs">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/task.py" beforeDir="false" afterPath="$PROJECT_DIR$/task_manager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/task_module_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/task_module_test.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -16,8 +18,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Python Script" />
         <option value="HTML File" />
+        <option value="Python Script" />
       </list>
     </option>
   </component>
@@ -55,10 +57,10 @@
     "RunOnceActivity.rust.reset.selective.auto.import": "true",
     "git-widget-placeholder": "#3 on SQL",
     "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "E:/Projects/Базовое Приложение Джанго",
+    "last_opened_file_path": "C:/Users/79857/Downloads/Gruvbox_Material_Theme-0.1.4 (1).zip",
     "nodejs_package_manager_path": "npm",
     "org.rust.cargo.project.model.impl.CargoExternalSystemProjectAware.subscribe.first.balloon": "",
-    "settings.editor.selected.configurable": "vcs.Git",
+    "settings.editor.selected.configurable": "preferences.lookFeel",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
