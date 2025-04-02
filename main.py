@@ -2,7 +2,7 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from task_manager import TaskManager, Task
 
-#sections = ["Buy milk", "watch arcane", "idk", "BRUH", "EHM Rust is better"]
+# sections = ["Buy milk", "watch arcane", "idk", "BRUH", "EHM Rust is better"]
 tmanager_path = ""
 tmanager = TaskManager()
 app = FastAPI()
@@ -168,18 +168,22 @@ app = FastAPI()
 #         case _:
 #             print("Please choose an option")
 
+
 @app.get("/")
 def read_root():
     return {"Hello": "World"}
+
 
 @app.get("/tasks", response_model=list[Task])
 def get_tasks():
     return tmanager.get_tasks()
 
+
 @app.post("/tasks", response_model=Task)
 def add_task(task: Task):
     tmanager.add_task(task)
     return task
+
 
 @app.get("/tasks/{task_id}", response_model=Task)
 def read_task(task_id: int):
@@ -187,6 +191,7 @@ def read_task(task_id: int):
     if task is None:
         raise HTTPException(status_code=404, detail="Task not found")
     return task
+
 
 @app.delete("/tasks/{task_id}")
 def delete_task(task_id: int):
@@ -196,6 +201,8 @@ def delete_task(task_id: int):
     tmanager.remove_task(task_id)
     return {"detail": "Task deleted"}
 
+
 if __name__ == "__main__":
     import uvicorn
+
     uvicorn.run(app, host="0.0.0.0", port=8000, reload=True)

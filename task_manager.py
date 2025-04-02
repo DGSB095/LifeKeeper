@@ -1,31 +1,27 @@
-from typing import List, Optional
-from models import Task
-
 class TaskManager:
     def __init__(self):
         self.tasks = []
-        self.next_id = 0
+        self.sections = {1, 2, 3}  # Example sections
 
-    def add_task(self, task: Task):
-        task.id = self.next_id
+    def add_task(self, task):
+        if task.section not in self.sections:
+            raise ValueError(f"Section {task.section} does not exist")
         self.tasks.append(task)
-        self.next_id += 1
 
-    def remove_task(self, id: int):
-        self.tasks = [task for task in self.tasks if task.id != id]
+    def get_tasks(self):
+        return self.tasks
 
-    def get_task(self, id: int) -> Optional[Task]:
+    def get_task(self, task_id):
         for task in self.tasks:
-            if task.id == id:
+            if task.id == task_id:
                 return task
         return None
 
-    def get_tasks(self) -> List[Task]:
-        return self.tasks
+    def remove_task(self, task_id):
+        self.tasks = [task for task in self.tasks if task.id != task_id]
 
-    def update_task(self, id: int, updated_task: Task) -> Optional[Task]:
-        for index, task in enumerate(self.tasks):
-            if task.id == id:
-                self.tasks[index] = updated_task
-                return updated_task
-        return None
+    def update_task(self, task_id, updated_task):
+        for i, task in enumerate(self.tasks):
+            if task.id == task_id:
+                self.tasks[i] = updated_task
+                break
