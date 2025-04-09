@@ -1,0 +1,27 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: backend/backenddockerfile.dockerfile
+    ports:
+        - "8000:8000"
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/frontenddockerfile.dockerfile
+    ports:
+        - "3000:3000"
+
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: tasks
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+volumes:
+  db_data:

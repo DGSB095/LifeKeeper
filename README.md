@@ -55,6 +55,31 @@ LifeKeeper is a simple task manager that helps you keep track of your tasks and 
     npm start
     ```
 
+## Run with Docker
+
+1. **Build the Docker images:**
+
+    ```sh
+    docker-compose build
+    ```
+
+2. **Run the application:**
+
+    ```sh
+    docker-compose up
+    ```
+
+3. **Access the application:**
+
+    - Frontend: [http://localhost:3000](http://localhost:3000)
+    - Backend: [http://localhost:8000](http://localhost:8000)
+
+4. **Stop the application:**
+
+    ```sh
+    docker-compose down
+    ```
+
 ## Running Tests
 
 1. **Backend tests:**
