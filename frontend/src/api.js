@@ -12,12 +12,28 @@ export const addTask = async (task) => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(task),
     });
-    if (!response.ok) throw new Error("Failed to add task");
+    if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || "Failed to add task");
+    }
     return response.json();
 };
 
 export const getSections = async () => {
     const response = await fetch(`${API_URL}/sections`);
     if (!response.ok) throw new Error("Failed to fetch sections");
+    return response.json();
+};
+
+export const addSection = async (sectionName) => {
+    const response = await fetch(`${API_URL}/sections`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: sectionName }),
+    });
+    if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || "Failed to add section");
+    }
     return response.json();
 };

@@ -11,13 +11,12 @@ services:
       dockerfile: frontend/frontenddockerfile.dockerfile
     ports:
         - "3000:3000"
-
   db:
     image: postgres:15
     environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: tasks
+      POSTGRES_USER: dgsb
+      POSTGRES_PASSWORD: 12345pass
+      POSTGRES_DB: dgsb_notes
     ports:
       - "5432:5432"
     volumes:

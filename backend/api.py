@@ -1,9 +1,13 @@
-from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from models import Task
 from task_manager import TaskManager
+from fastapi import FastAPI, HTTPException
+from sqlalchemy.orm import Session
+from models import Task
+from schemas import TaskSchema
+from database import SessionLocal
 
 app = FastAPI()
+
 tmanager = TaskManager()
 
 app.add_middleware(
@@ -17,33 +21,31 @@ app.add_middleware(
 def read_root():
     return {"Hello": "World"}
 
-
-@app.get("/tasks", response_model=list[Task])
+@app.get("/tasks", response_model=list[dict])
 def get_tasks():
     return tmanager.get_tasks()
 
+@app.post("/tasks", response_model=dict)
+def add_task(task: TaskSchema):
+    try:
+        new_task = tmanager.add_task(task)
+        return new_task.to_dict()
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
-@app.post("/tasks", response_model=Task)
-def add_task(task: Task):
-    tmanager.add_task(task)
-    return task
-
-
-@app.get("/tasks/{task_id}", response_model=Task)
+@app.get("/tasks/{task_id}", response_model=TaskSchema)
 def read_task(task_id: int):
     task = tmanager.get_task(task_id)
     if task is None:
         raise HTTPException(status_code=404, detail="Task not found")
     return task
 
-
-@app.put("/tasks/{task_id}", response_model=Task)
-def update_task(task_id: int, updated_task: Task):
+@app.put("/tasks/{task_id}", response_model=TaskSchema)
+def update_task(task_id: int, updated_task: TaskSchema):
     task = tmanager.update_task(task_id, updated_task)
     if task is None:
         raise HTTPException(status_code=404, detail="Task not found")
     return task
-
 
 @app.delete("/tasks/{task_id}")
 def delete_task(task_id: int):
