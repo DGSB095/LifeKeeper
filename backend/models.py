@@ -6,14 +6,15 @@ class Section(Base):
     __tablename__ = "sections"
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String, unique=True, nullable=False)
+    description = Column(String, nullable=False)
 
-    # Define the relationship to Task
     tasks = relationship("Task", back_populates="section")
 
     def to_dict(self):
         return {
             "id": self.id,
             "name": self.name,
+            "description": self.description,
         }
 
 class Task(Base):

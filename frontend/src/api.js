@@ -25,11 +25,14 @@ export const getSections = async () => {
     return response.json();
 };
 
-export const addSection = async (sectionName) => {
+export const addSection = async (sectionName, sectionDescription) => {
     const response = await fetch(`${API_URL}/sections`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: sectionName }),
+        body: JSON.stringify({
+            name: sectionName,
+            description: sectionDescription || null,
+        }),
     });
     if (!response.ok) {
         const error = await response.json();

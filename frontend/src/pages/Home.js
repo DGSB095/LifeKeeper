@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+//import '../css/tmanager.css'; // Adjust the path as necessary
 
 const Home = () => {
     return (
@@ -8,7 +9,7 @@ const Home = () => {
                 <nav className="navbar">
                     <div className="logo">
                         <Link to="/">
-                            <img src="test_logo.png" alt="ProjectHub Logo" />
+                            <img src="test_logo.png" alt="LifeKeeperLogo" />
                             <span>LifeKeeper</span>
                         </Link>
                     </div>

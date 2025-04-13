@@ -263,3 +263,39 @@ header {
         margin-right: 10px; /* Adjust margin for very small screens */
     }
 }
+
+#tasks {
+    margin: 20px 0;
+}
+
+.task-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+#task-form {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+#task-content {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    background-color: #28a745;
+    color: white;
+    cursor: pointer;
+}

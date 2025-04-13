@@ -13,3 +13,9 @@ class TaskSchema(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class SectionSchema(BaseModel):
+    name: str
+    description: Optional[str]
+

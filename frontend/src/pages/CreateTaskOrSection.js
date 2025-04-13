@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const CreateTaskOrSection = () => {
+    const [sectionDescription, setSectionDescription] = useState("");
     const [sections, setSections] = useState([]);
     const [taskContent, setTaskContent] = useState("");
     const [selectedSection, setSelectedSection] = useState(null);
@@ -62,11 +63,15 @@ const CreateTaskOrSection = () => {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ section_name: sectionName }),
+                body: JSON.stringify({
+                    name: sectionName,
+                    description: sectionDescription || null,
+                }),
             });
             if (response.ok) {
                 alert("Section added successfully!");
-                navigate("/tasks"); // Redirect to tasks page
+                const updatedSections = await fetch("http://localhost:8000/sections");
+                setSections(await updatedSections.json()); // Refresh sections
             } else {
                 const error = await response.json();
                 alert(`Error: ${error.detail}`);
@@ -133,6 +138,11 @@ const CreateTaskOrSection = () => {
                         value={sectionName}
                         onChange={(e) => setSectionName(e.target.value)}
                         required
+                    />
+                    <textarea
+                        placeholder="Section description (optional)"
+                        value={sectionDescription}
+                        onChange={(e) => setSectionDescription(e.target.value)}
                     />
                     <button type="submit">Add Section</button>
                 </form>

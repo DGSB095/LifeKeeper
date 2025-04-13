@@ -10,18 +10,27 @@ class TaskManager:
         # Add default sections
         session = self.Session()
         if not session.query(Section).all():
-            default_sections = ["Work", "Personal", "Shopping"]
-            for section_name in default_sections:
-                session.add(Section(name=section_name))
+            default_sections = [
+                {"name": "Work", "description": "Work-related tasks"},
+                {"name": "Personal", "description": "Personal tasks"},
+                {"name": "Shopping", "description": "Shopping list"},
+            ]
+            for section in default_sections:
+                session.add(Section(**section))
             session.commit()
         session.close()
 
-    def add_section(self, section_name):
+    def add_section(self, section_name, section_description=None):
         session = self.Session()
-        section = Section(name=section_name)
-        session.add(section)
-        session.commit()
-        session.close()
+        try:
+            section = Section(name=section_name, description=section_description)
+            session.add(section)
+            session.commit()
+        except Exception as e:
+            session.rollback()
+            raise e
+        finally:
+            session.close()
 
     def remove_section(self, section_name):
         session = self.Session()

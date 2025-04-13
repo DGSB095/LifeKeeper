@@ -1,10 +1,7 @@
 from fastapi.middleware.cors import CORSMiddleware
 from task_manager import TaskManager
 from fastapi import FastAPI, HTTPException
-from sqlalchemy.orm import Session
-from models import Task
-from schemas import TaskSchema
-from database import SessionLocal
+from schemas import TaskSchema, SectionSchema
 
 app = FastAPI()
 
@@ -55,15 +52,25 @@ def delete_task(task_id: int):
     tmanager.remove_task(task_id)
     return {"detail": "Task deleted"}
 
-@app.get("/sections", response_model=list[str])
+@app.get("/sections", response_model=list[dict])
 def get_sections():
     sections = tmanager.get_sections()
-    return [section.name for section in sections]
+    return [
+        {
+            "id": section.id,
+            "name": section.name,
+            "description": section.description,
+        }
+        for section in sections
+    ]
 
 @app.post("/sections")
-def add_section(section_name: str):
-    tmanager.add_section(section_name)
-    return {"detail": "Section added"}
+def create_section(section: SectionSchema):
+    try:
+        tmanager.add_section(section_name=section.name, section_description=section.description)
+        return {"message": "Section created successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 @app.delete("/sections/{section_name}")
 def delete_section(section_name: str):

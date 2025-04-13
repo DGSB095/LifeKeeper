@@ -1,0 +1,301 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background-color: #1e1e2f;
+    color: white;
+}
+
+header {
+    background-color: #161625;
+    padding: 10px 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.logo img {
+    height: 30px;
+    margin-right: 10px;
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.nav-links li {
+    margin: 0 10px;
+}
+
+.nav-links a {
+    background-color: #1e1e2f;
+    color: goldenrod;
+    border: 1px solid goldenrod;
+    border-radius: 5px;
+    padding: 8px 15px;
+    text-decoration: none;
+    font-size: 14px;
+    transition: background-color 0.3s, color 0.3s;
+    display: inline-block;
+}
+
+.nav-links a:hover {
+    background-color: #e0b052;
+    color: #1e1e2f;
+}
+
+.nav-actions {
+    display: flex;
+    align-items: center;
+}
+
+.sign-in-btn {
+    background-color: #1e1e2f;
+    color: goldenrod;
+    border: 1px solid goldenrod;
+    border-radius: 5px;
+    padding: 8px 15px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    font-size: 14px;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.sign-in-btn:hover {
+    background-color: #e0b052;
+    color: #1e1e2f;
+}
+
+.icons {
+    display: flex;
+    align-items: center;
+    margin-left: 15px;
+}
+
+.icons a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    background-color: #5a5a71;
+    border-radius: 50%;
+    border-color: transparent;
+    margin: 0 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    text-decoration: none;
+}
+
+.icons a:hover {
+    background-color: goldenrod;
+}
+
+.discord_icon {
+    width: 80%;
+    height: auto;
+}
+
+.x_icon {
+    width: 60%;
+    height: auto;
+}
+
+.github_icon {
+    width: 60%;
+    height: auto;
+}
+
+.settings_icon {
+    width: 60%;
+    height: auto;
+}
+
+.vault-nav-section {
+    display: block;
+    justify-content: center;
+    text-align: center;
+    padding: 20px;
+}
+
+.vault-nav-header {
+    margin-bottom: 20px;
+}
+
+.lifekeeper {
+    color: goldenrod;
+    font-size: 32px;
+    text-align: center;
+}
+
+.lifekeeper-p {
+    color: goldenrod;
+    font-size: 24px;
+    text-align: center;
+}
+
+.vault-nav-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.vault-nav-actions li {
+    margin: 30px 0; /* Adjust space between the items */
+    list-style: none;
+}
+
+.nav-item {
+    display: block;
+    width: 100%;
+    max-width: 1400px; /* Adjust the max-width for the items */
+    height: 130px; /* Adjust the height for the items */
+    margin: 0 auto; /* Center the items */
+    background-color: #1e1e2f;
+    color: goldenrod;
+    border: 3px solid goldenrod;
+    border-radius: 5px;
+    padding: 25px; /* Adjust the padding */
+    text-decoration: none;
+    font-size: 32px; /* Adjust the font size */
+    transition: background-color 0.3s, color 0.3s;
+    text-align: left; /* Align text to the left */
+    display: flex; /* Use flexbox to center content */
+    align-items: center; /* Center content vertically */
+}
+
+.icon-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 80px; /* Make the icon container smaller */
+    height: 80px; /* Make the icon container smaller */
+    margin-right: 25px; /* Adjust the margin */
+    border: 4px solid goldenrod; /* Make the border thicker */
+    border-radius: 3px; /* Optional: Add border radius to match the style */
+    padding: 20px; /* Increase the padding to create space between the icon and the border */
+}
+
+.file-icon {
+    width: 100%; /* Make the icon fit within the container */
+    height: 100%; /* Make the icon fit within the container */
+}
+
+.nav-item:hover {
+    background-color: #e0b052;
+    color: #1e1e2f;
+}
+
+.nav-item:hover .icon-container {
+    background-color: #e0b052;
+    border-color: #1e1e2f;
+}
+
+.nav-item:hover .plus-icon {
+    filter: invert(0); /* Invert the colors on hover for the plus icon */
+}
+
+.nav-item .plus-icon {
+    filter: invert(1); /* Invert the colors on hover for the plus icon */
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .nav-item {
+        max-width: 1000px; /* Adjust max-width for smaller screens */
+        height: 110px; /* Adjust height for smaller screens */
+        font-size: 28px; /* Adjust font size for smaller screens */
+        padding: 20px; /* Adjust padding for smaller screens */
+    }
+
+    .icon-container {
+        width: 60px; /* Adjust icon size for smaller screens */
+        height: 60px; /* Adjust icon size for smaller screens */
+        margin-right: 20px; /* Adjust margin for smaller screens */
+    }
+}
+
+@media (max-width: 800px) {
+    .nav-item {
+        max-width: 700px; /* Adjust max-width for smaller screens */
+        height: 90px; /* Adjust height for smaller screens */
+        font-size: 24px; /* Adjust font size for smaller screens */
+        padding: 15px; /* Adjust padding for smaller screens */
+    }
+
+    .icon-container {
+        width: 50px; /* Adjust icon size for smaller screens */
+        height: 50px; /* Adjust icon size for smaller screens */
+        margin-right: 15px; /* Adjust margin for smaller screens */
+    }
+}
+
+@media (max-width: 600px) {
+    .nav-item {
+        max-width: 100%; /* Full width for very small screens */
+        height: auto; /* Auto height for very small screens */
+        font-size: 20px; /* Adjust font size for very small screens */
+        padding: 10px; /* Adjust padding for very small screens */
+    }
+
+    .icon-container {
+        width: 40px; /* Adjust icon size for very small screens */
+        height: 40px; /* Adjust icon size for very small screens */
+        margin-right: 10px; /* Adjust margin for very small screens */
+    }
+}
+
+#tasks {
+    margin: 20px 0;
+}
+
+.task-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+#task-form {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+#task-content {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    background-color: #28a745;
+    color: white;
+    cursor: pointer;
+}
