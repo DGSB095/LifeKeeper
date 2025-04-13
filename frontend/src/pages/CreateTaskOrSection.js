@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import "../css/tmanager.css";
 
 const CreateTaskOrSection = () => {
     const [sectionDescription, setSectionDescription] = useState("");
@@ -10,7 +11,7 @@ const CreateTaskOrSection = () => {
     const [shouldRepeat, setShouldRepeat] = useState(false);
     const [deleteOnComplete, setDeleteOnComplete] = useState(false);
     const [sectionName, setSectionName] = useState("");
-    const [isCreatingTask, setIsCreatingTask] = useState(true); // Toggle between task and section creation
+    const [isCreatingTask, setIsCreatingTask] = useState(true);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -45,7 +46,7 @@ const CreateTaskOrSection = () => {
             });
             if (response.ok) {
                 alert("Task added successfully!");
-                navigate("/tasks"); // Redirect to tasks page
+                navigate("/tasks");
             } else {
                 const error = await response.json();
                 alert(`Error: ${error.detail}`);
@@ -71,7 +72,7 @@ const CreateTaskOrSection = () => {
             if (response.ok) {
                 alert("Section added successfully!");
                 const updatedSections = await fetch("http://localhost:8000/sections");
-                setSections(await updatedSections.json()); // Refresh sections
+                setSections(await updatedSections.json());
             } else {
                 const error = await response.json();
                 alert(`Error: ${error.detail}`);
@@ -82,23 +83,37 @@ const CreateTaskOrSection = () => {
     };
 
     return (
-        <div>
-            <h1>{isCreatingTask ? "Create Task" : "Create Section"}</h1>
-            <button onClick={() => setIsCreatingTask(true)}>Create Task</button>
-            <button onClick={() => setIsCreatingTask(false)}>Create Section</button>
+        <div className="page-container">
+            <h1 className="page-title">{isCreatingTask ? "Create Task" : "Create Section"}</h1>
+            <div className="button-group">
+                <button
+                    className={`primary-button ${isCreatingTask ? "active" : ""}`}
+                    onClick={() => setIsCreatingTask(true)}
+                >
+                    Create Task
+                </button>
+                <button
+                    className={`primary-button ${!isCreatingTask ? "active" : ""}`}
+                    onClick={() => setIsCreatingTask(false)}
+                >
+                    Create Section
+                </button>
+            </div>
 
             {isCreatingTask ? (
-                <form onSubmit={handleAddTask}>
+                <form className="form-container" onSubmit={handleAddTask}>
                     <input
                         type="text"
                         placeholder="Task content"
                         value={taskContent}
                         onChange={(e) => setTaskContent(e.target.value)}
+                        className="form-input"
                         required
                     />
                     <select
                         value={selectedSection}
                         onChange={(e) => setSelectedSection(e.target.value || null)}
+                        className="form-input"
                     >
                         <option value={null}>No Section</option>
                         {sections.map((section) => (
@@ -111,8 +126,9 @@ const CreateTaskOrSection = () => {
                         type="date"
                         value={dueDate}
                         onChange={(e) => setDueDate(e.target.value)}
+                        className="form-input"
                     />
-                    <label>
+                    <label className="form-label">
                         <input
                             type="checkbox"
                             checked={shouldRepeat}
@@ -120,7 +136,7 @@ const CreateTaskOrSection = () => {
                         />
                         Should Repeat
                     </label>
-                    <label>
+                    <label className="form-label">
                         <input
                             type="checkbox"
                             checked={deleteOnComplete}
@@ -128,23 +144,29 @@ const CreateTaskOrSection = () => {
                         />
                         Delete on Complete
                     </label>
-                    <button type="submit">Add Task</button>
+                    <button type="submit" className="primary-button">
+                        Add Task
+                    </button>
                 </form>
             ) : (
-                <form onSubmit={handleAddSection}>
+                <form className="form-container" onSubmit={handleAddSection}>
                     <input
                         type="text"
                         placeholder="Section name"
                         value={sectionName}
                         onChange={(e) => setSectionName(e.target.value)}
+                        className="form-input"
                         required
                     />
                     <textarea
                         placeholder="Section description (optional)"
                         value={sectionDescription}
                         onChange={(e) => setSectionDescription(e.target.value)}
+                        className="form-input"
                     />
-                    <button type="submit">Add Section</button>
+                    <button type="submit" className="primary-button">
+                        Add Section
+                    </button>
                 </form>
             )}
         </div>

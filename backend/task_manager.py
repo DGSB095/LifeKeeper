@@ -1,6 +1,7 @@
 from sqlalchemy.orm import sessionmaker
 from models import Task, Section, Base
 from sqlalchemy import create_engine
+from schemas import TaskSchema
 
 class TaskManager:
     def __init__(self, db_url="postgresql://dgsb:12345pass@db:5432/dgsb_notes"):
@@ -32,6 +33,8 @@ class TaskManager:
         finally:
             session.close()
 
+
+
     def remove_section(self, section_name):
         session = self.Session()
         section = session.query(Section).filter_by(name=section_name).first()
@@ -41,26 +44,78 @@ class TaskManager:
         session.commit()
         session.close()
 
-    def add_task(self, task):
+    def add_task(self, task: TaskSchema):
         session = self.Session()
-        section = None
-        if task.section_id:
-            section = session.query(Section).filter_by(id=task.section_id).first()
-            if not section:
-                raise ValueError(f"Section with ID '{task.section_id}' does not exist")
-        db_task = Task(
-            content=task.content,
-            section_id=section.id if section else None,
-            due_date=task.due_date,
-            should_repeat=task.should_repeat,
-            completed=False,  # Always default to False
-            delete_on_complete=task.delete_on_complete,
-        )
-        session.add(db_task)
+        try:
+            db_task = Task(
+                content=task.content,
+                section_id=task.section_id,
+                due_date=task.due_date,
+                should_repeat=task.should_repeat,
+                delete_on_complete=task.delete_on_complete,
+                completed= False,
+            )
+            session.add(db_task)
+            session.commit()
+            session.refresh(db_task)
+        except Exception as e:
+            session.rollback()
+            raise e
+        finally:
+            session.close()
+
+    def remove_task(self, task_id: int):
+        session = self.Session()
+        task = session.query(Task).filter_by(id=task_id).first()
+        if not task:
+            raise ValueError(f"Task with ID '{task_id}' does not exist")
+        session.delete(task)
         session.commit()
-        session.refresh(db_task)
         session.close()
-        return db_task
+
+    def get_task(self, task_id: int):
+        session = self.Session()
+        task = session.query(Task).filter_by(id=task_id).first()
+        if not task:
+            raise ValueError(f"Task with ID '{task_id}' does not exist")
+        session.close()
+        return task.to_dict()
+
+    def update_task(self, task_id: int, updated_task: TaskSchema):
+        session = self.Session()
+        task = session.query(Task).filter_by(id=task_id).first()
+        if not task:
+            raise ValueError(f"Task with ID '{task_id}' does not exist")
+        try:
+            task.content = updated_task.content
+            task.section_id = updated_task.section_id
+            task.due_date = updated_task.due_date
+            task.should_repeat = updated_task.should_repeat
+            task.delete_on_complete = updated_task.delete_on_complete
+            if (task.delete_on_complete == True) and (task.completed == True):
+                session.delete(task)
+            session.commit()
+        except Exception as e:
+            session.rollback()
+            raise e
+        finally:
+            session.close()
+
+    def complete_task(self, task_id: int):
+        session = self.Session()
+        task = session.query(Task).filter_by(id=task_id).first()
+        if not task:
+            raise ValueError(f"Task with ID '{task_id}' does not exist")
+        try:
+            task.completed = True
+            if task.delete_on_complete == True:
+                self.remove_task(task_id)
+            session.commit()
+        except Exception as e:
+            session.rollback()
+            raise e
+        finally:
+            session.close()
 
     def get_tasks(self):
         session = self.Session()
@@ -68,10 +123,6 @@ class TaskManager:
         session.close()
         return [task.to_dict() for task in tasks]
 
-    def get_task(self, task_id):
-        session = self.Session()
-        task = session.query(Task).filter_by(id=task_id).first()
-        session.close()
 
     def get_sections(self):
         session = self.Session()

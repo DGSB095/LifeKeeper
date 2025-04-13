@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import "../css/tmanager.css"; // Adjust the path as necessary
 
 const TasksAndSections = () => {
     const navigate = useNavigate();
@@ -38,7 +39,12 @@ const TasksAndSections = () => {
         return tasks
             .filter((task) => task.section_id === sectionId)
             .map((task) => (
-                <li key={task.id}>
+                <li
+                    key={task.id}
+                    onClick={() => navigate(`/taskdetails/${task.id}`)}
+                    style={{ cursor: "pointer", color: "goldenrod", textDecoration: "underline" }}
+                >
+                    <input type="checkbox" style={{ marginRight: "10px" }} />
                     {task.content} (Due: {task.due_date || "No due date"})
                 </li>
             ));
@@ -71,13 +77,13 @@ const styles = {
         alignItems: "center",
         justifyContent: "center",
         height: "100vh",
-        backgroundColor: "#f4f4f4", // Match homepage background
+        backgroundColor: "#1e1e2f", // Updated to match the homepage background
         padding: "20px",
     },
     title: {
         fontSize: "2rem",
         marginBottom: "20px",
-        color: "#333", // Match homepage text color
+        color: "goldenrod", // Updated to match the homepage text color
     },
     button: {
         marginBottom: "20px",
@@ -85,36 +91,36 @@ const styles = {
         fontSize: "16px",
         border: "none",
         borderRadius: "5px",
-        backgroundColor: "#28a745", // Match homepage button color
-        color: "white",
+        backgroundColor: "goldenrod", // Updated to match the homepage button color
+        color: "#1e1e2f", // Updated to match the homepage button text color
         cursor: "pointer",
     },
     buttonHover: {
-        backgroundColor: "#218838", // Match homepage hover effect
+        backgroundColor: "#e0b052", // Updated to match the homepage hover effect
     },
     list: {
         listStyleType: "none",
         padding: 0,
         width: "50%",
-        backgroundColor: "#fff", // Match homepage card background
+        backgroundColor: "#1e1e2f", // Updated to match the homepage card background
         borderRadius: "5px",
         boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
     },
     listItem: {
         padding: "10px 15px",
-        borderBottom: "1px solid #ddd",
-        color: "#555", // Match homepage text color
+        borderBottom: "1px solid goldenrod", // Updated to match the homepage border color
+        color: "goldenrod", // Updated to match the homepage text color
     },
     sectionHeader: {
         cursor: "pointer",
         fontWeight: "bold",
-        color: "#28a745", // Match homepage accent color
+        color: "goldenrod", // Updated to match the homepage accent color
     },
     subList: {
         listStyleType: "none",
         paddingLeft: "20px",
         marginTop: "10px",
-        color: "#666", // Subtle text color for tasks
+        color: "#e0b052", // Updated to match the homepage subtle text color
     },
 };
 

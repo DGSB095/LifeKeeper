@@ -22,27 +22,40 @@ def read_root():
 def get_tasks():
     return tmanager.get_tasks()
 
+
 @app.post("/tasks", response_model=dict)
-def add_task(task: TaskSchema):
+async def add_task(task: TaskSchema):
     try:
-        new_task = tmanager.add_task(task)
-        return new_task.to_dict()
+        created_task = tmanager.add_task(task)
+        return created_task
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Internal Server Error")
 
-@app.get("/tasks/{task_id}", response_model=TaskSchema)
+@app.get("/tasks/{task_id}", response_model=dict)
 def read_task(task_id: int):
-    task = tmanager.get_task(task_id)
-    if task is None:
-        raise HTTPException(status_code=404, detail="Task not found")
-    return task
+    try:
+        task = tmanager.get_task(task_id)
+        return task
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
 
-@app.put("/tasks/{task_id}", response_model=TaskSchema)
+@app.put("/tasks/{task_id}")
 def update_task(task_id: int, updated_task: TaskSchema):
     task = tmanager.update_task(task_id, updated_task)
     if task is None:
         raise HTTPException(status_code=404, detail="Task not found")
-    return task
+
+@app.put("/tasks/{task_id}/complete")
+def complete_task(task_id: int):
+    try:
+        tmanager.complete_task(task_id)
+        return {"detail": "Task marked as complete"}
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Internal Server Error")
 
 @app.delete("/tasks/{task_id}")
 def delete_task(task_id: int):

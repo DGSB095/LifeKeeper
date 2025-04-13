@@ -299,3 +299,95 @@ button {
     color: white;
     cursor: pointer;
 }
+
+.page-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #1e1e2f; /* Match homepage background */
+    padding: 20px;
+}
+
+.page-title {
+    font-size: 2.5rem;
+    color: goldenrod; /* Match homepage text color */
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.button-group {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+.primary-button {
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 10px;
+    background-color: goldenrod; /* Match homepage button color */
+    color: #1e1e2f; /* Match homepage button text color */
+    cursor: pointer;
+    margin: 0 10px;
+    transition: background-color 0.3s ease;
+}
+
+.primary-button:hover {
+    background-color: #e0b052; /* Match homepage hover effect */
+}
+
+.primary-button.active {
+    background-color: #e0b052; /* Active state matches hover effect */
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 500px;
+    background-color: #161625; /* Updated background color */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border: 2px solid goldenrod; /* Added golden border */
+}
+
+.form-input {
+    width: 100%; /* Ensures all fields take up the same width */
+    padding: 15px;
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+    border: 2px solid goldenrod;
+    border-radius: 10px;
+    background-color: #161625;
+    color: white;
+}
+
+.form-input select {
+    width: 100%; /* Ensures the select field matches the width of other fields */
+    appearance: none; /* Removes default browser styling for consistency */
+}
+
+.form-input::placeholder {
+    color: #666; /* Subtle placeholder text color */
+}
+
+.form-label {
+    font-size: 1rem;
+    color: #666; /* Subtle text color */
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.form-label input {
+    margin-right: 10px;
+}
+
+.primary-button[type="submit"] {
+    width: 100%;
+}

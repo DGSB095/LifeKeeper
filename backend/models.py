@@ -20,7 +20,7 @@ class Section(Base):
 class Task(Base):
     __tablename__ = "tasks"
 
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     content = Column(String, nullable=False)
     section_id = Column(Integer, ForeignKey("sections.id"), nullable=True)
     due_date = Column(DateTime, nullable=True)

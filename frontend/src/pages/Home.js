@@ -38,7 +38,6 @@ const Home = () => {
                     <ul className="vault-nav-actions">
                         <li><a href="/tasks" className="nav-item"><div className="icon-container"><img className="folder-icon file-icon plus-icon" src="icons/plus.png" alt="Folder Icon" /></div> Create a tmanager</a></li>
                         <li><a href="tasks/" className="nav-item"><div className="icon-container"><img className="folder-icon file-icon" src="icons/folder.png" alt="Folder Icon" /></div> Open a tmanager</a></li>
-                        <li><a className="nav-item"><div className="icon-container"><img className="folder-icon file-icon" src="icons/folder.png" alt="Folder Icon" /></div> Open a tmanager</a></li>
                     </ul>
                 </div>
             </main>
