@@ -105,7 +105,7 @@ class TaskManager:
             task.should_repeat = updated_task.should_repeat if updated_task.should_repeat is not None else task.should_repeat
             task.delete_on_complete = updated_task.delete_on_complete if updated_task.delete_on_complete is not None else task.delete_on_complete
 
-            if task.delete_on_complete and task.completed:
+            if task.delete_on_complete == True and task.completed == True:
                 session.delete(task)
             else:
                 session.commit()
