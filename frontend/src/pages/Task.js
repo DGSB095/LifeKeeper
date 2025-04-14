@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getTaskById, updateTask } from "../api";
+import { getTaskById, updateTask, deleteTask } from "../api";
+import HierarchyTree from "../components/HierarchyTree";
 
 const TaskDetails = () => {
     const { taskId } = useParams();
@@ -16,12 +17,19 @@ const TaskDetails = () => {
                 const taskData = await getTaskById(taskId);
                 setTask(taskData);
                 setFormData(taskData);
+            } catch (err) {
+                setError("Failed to fetch task data.");
+                console.error(err);
+                return;
+            }
 
+            try {
                 const response = await fetch("http://localhost:8000/sections");
+                if (!response.ok) throw new Error("Failed to fetch sections.");
                 const sectionsData = await response.json();
                 setSections(sectionsData);
             } catch (err) {
-                setError("Failed to fetch data.");
+                setError("Failed to fetch sections.");
                 console.error(err);
             }
         };
@@ -32,6 +40,19 @@ const TaskDetails = () => {
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
+    };
+
+    const handleDelete = async () => {
+        if (window.confirm("Are you sure you want to delete this task?")) {
+            try {
+                await deleteTask(taskId);
+                alert("Task deleted successfully!");
+                navigate(-1);
+            } catch (error) {
+                console.error("Failed to delete task:", error);
+                alert("Failed to delete task.");
+            }
+        }
     };
 
     const handleCheckboxChange = (e) => {
@@ -45,7 +66,7 @@ const TaskDetails = () => {
                 taskId,
                 formData.content,
                 formData.section_id,
-                formData.due_date,
+                formData.due_date || null,
                 formData.should_repeat,
                 formData.delete_on_complete,
                 formData.completed
@@ -57,6 +78,10 @@ const TaskDetails = () => {
         }
     };
 
+    const handleSelect = (item) => {
+        console.log("Selected item:", item);
+    };
+
     if (error) {
         return <div style={styles.error}>{error}</div>;
     }
@@ -66,82 +91,88 @@ const TaskDetails = () => {
     }
 
     return (
-        <div style={styles.container}>
-            <div style={styles.frame}>
-                <h1 style={styles.title}>Edit Task</h1>
-                <div style={styles.field}>
-                    <label>Content:</label>
-                    <input
-                        type="text"
-                        name="content"
-                        value={formData.content || ""}
-                        onChange={handleInputChange}
-                        style={styles.input}
-                    />
-                </div>
-                <div style={styles.field}>
-                    <label>Due Date:</label>
-                    <input
-                        type="date"
-                        name="due_date"
-                        value={formData.due_date || ""}
-                        onChange={handleInputChange}
-                        style={styles.input}
-                    />
-                </div>
-                <div style={styles.field}>
-                    <label>Section:</label>
-                    <select
-                        name="section_id"
-                        value={formData.section_id || ""}
-                        onChange={handleInputChange}
-                        style={styles.input}
-                    >
-                        <option value="">No Section</option>
-                        {sections.map((section) => (
-                            <option key={section.id} value={section.id}>
-                                {section.name}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-                <div style={styles.field}>
-                    <label>Should Repeat:</label>
-                    <input
-                        type="checkbox"
-                        name="should_repeat"
-                        checked={formData.should_repeat || false}
-                        onChange={handleCheckboxChange}
-                        style={styles.checkbox}
-                    />
-                </div>
-                <div style={styles.field}>
-                    <label>Delete on Complete:</label>
-                    <input
-                        type="checkbox"
-                        name="delete_on_complete"
-                        checked={formData.delete_on_complete || false}
-                        onChange={handleCheckboxChange}
-                        style={styles.checkbox}
-                    />
-                </div>
-                <div style={styles.field}>
-                    <label>Completed:</label>
-                    <input
-                        type="checkbox"
-                        name="completed"
-                        checked={formData.completed || false}
-                        onChange={handleCheckboxChange}
-                        style={styles.checkbox}
-                    />
-                </div>
-                <div style={styles.buttonContainer}>
-                    <button style={styles.button} onClick={handleUpdate}>
-                        Update
-                    </button>
-                    <button style={styles.button} onClick={() => navigate(-1)}>
-                        Back
-                    </button>
+        <div style={styles.layout}>
+            <HierarchyTree onSelect={handleSelect} />
+            <div style={styles.content}>
+                <div style={styles.frame}>
+                    <h1 style={styles.title}>Edit Task</h1>
+                    <div style={styles.field}>
+                        <label>Content:</label>
+                        <input
+                            type="text"
+                            name="content"
+                            value={formData.content || ""}
+                            onChange={handleInputChange}
+                            style={styles.input}
+                        />
+                    </div>
+                    <div style={styles.field}>
+                        <label>Due Date:</label>
+                        <input
+                            type="date"
+                            name="due_date"
+                            value={formData.due_date || ""}
+                            onChange={handleInputChange}
+                            style={styles.input}
+                        />
+                    </div>
+                    <div style={styles.field}>
+                        <label>Section:</label>
+                        <select
+                            name="section_id"
+                            value={formData.section_id || ""}
+                            onChange={handleInputChange}
+                            style={styles.input}
+                        >
+                            <option value="">No Section</option>
+                            {sections.map((section) => (
+                                <option key={section.id} value={section.id}>
+                                    {section.name}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    <div style={styles.field}>
+                        <label>Should Repeat:</label>
+                        <input
+                            type="checkbox"
+                            name="should_repeat"
+                            checked={formData.should_repeat || false}
+                            onChange={handleCheckboxChange}
+                            style={styles.checkbox}
+                        />
+                    </div>
+                    <div style={styles.field}>
+                        <label>Delete on Complete:</label>
+                        <input
+                            type="checkbox"
+                            name="delete_on_complete"
+                            checked={formData.delete_on_complete || false}
+                            onChange={handleCheckboxChange}
+                            style={styles.checkbox}
+                        />
+                    </div>
+                    <div style={styles.field}>
+                        <label>Completed:</label>
+                        <input
+                            type="checkbox"
+                            name="completed"
+                            checked={formData.completed || false}
+                            onChange={handleCheckboxChange}
+                            style={styles.checkbox}
+                        />
+                    </div>
+                    <div style={styles.buttonContainer}>
+                        <button style={styles.button} onClick={handleUpdate}>
+                            Update
+                        </button>
+                        <button style={styles.button} onClick={handleDelete}>
+                            Delete
+                        </button>
+                        <button style={styles.button} onClick={() => navigate(-1)}>
+                            Back
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -149,12 +180,12 @@ const TaskDetails = () => {
 };
 
 const styles = {
-    container: {
+    layout: {
+        display: "flex",
+    },
+    content: {
+        flex: 1,
         padding: "20px",
-        backgroundColor: "#1e1e2f",
-        color: "goldenrod",
-        borderRadius: "5px",
-        textAlign: "center",
     },
     frame: {
         padding: "20px",

@@ -65,6 +65,14 @@ def delete_task(task_id: int):
     tmanager.remove_task(task_id)
     return {"detail": "Task deleted"}
 
+@app.delete("/reset")
+def reset():
+    try:
+        tmanager.reset()
+        return {"detail": "Database reset successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Internal Server Error")
+
 @app.get("/sections", response_model=list[dict])
 def get_sections():
     sections = tmanager.get_sections()

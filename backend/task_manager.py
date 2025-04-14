@@ -33,7 +33,17 @@ class TaskManager:
         finally:
             session.close()
 
-
+    def reset(self):
+        session = self.Session()
+        try:
+            session.query(Task).delete()
+            session.query(Section).delete()
+            session.commit()
+        except Exception as e:
+            session.rollback()
+            raise e
+        finally:
+            session.close()
 
     def remove_section(self, section_name):
         session = self.Session()
@@ -58,6 +68,7 @@ class TaskManager:
             session.add(db_task)
             session.commit()
             session.refresh(db_task)
+            return db_task.to_dict()
         except Exception as e:
             session.rollback()
             raise e
@@ -87,14 +98,20 @@ class TaskManager:
         if not task:
             raise ValueError(f"Task with ID '{task_id}' does not exist")
         try:
-            task.content = updated_task.content
-            task.section_id = updated_task.section_id
-            task.due_date = updated_task.due_date
-            task.should_repeat = updated_task.should_repeat
-            task.delete_on_complete = updated_task.delete_on_complete
-            if (task.delete_on_complete == True) and (task.completed == True):
+            # Update task fields with validation
+            task.content = updated_task.content or task.content
+            task.section_id = updated_task.section_id or task.section_id
+            task.due_date = updated_task.due_date or task.due_date
+            task.should_repeat = updated_task.should_repeat if updated_task.should_repeat is not None else task.should_repeat
+            task.delete_on_complete = updated_task.delete_on_complete if updated_task.delete_on_complete is not None else task.delete_on_complete
+
+            if task.delete_on_complete and task.completed:
                 session.delete(task)
-            session.commit()
+            else:
+                session.commit()
+                session.refresh(task)
+
+            return task.to_dict()
         except Exception as e:
             session.rollback()
             raise e

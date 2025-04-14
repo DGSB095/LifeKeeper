@@ -7,6 +7,7 @@ const TasksAndSections = () => {
     const [sections, setSections] = useState([]);
     const [tasks, setTasks] = useState([]);
     const [collapsedSections, setCollapsedSections] = useState({});
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -41,7 +42,7 @@ const TasksAndSections = () => {
             .map((task) => (
                 <li
                     key={task.id}
-                    onClick={() => navigate(`/taskdetails/${task.id}`)}
+                    onClick={() => navigate(`/tasks/${task.id}`)}
                     style={{ cursor: "pointer", color: "goldenrod", textDecoration: "underline" }}
                 >
                     <input type="checkbox" style={{ marginRight: "10px" }} />
@@ -53,6 +54,7 @@ const TasksAndSections = () => {
     return (
         <div style={styles.container}>
             <h1 style={styles.title}>Tasks and Sections</h1>
+            <button style={styles.menuButton} onClick={() => navigate("/")}>Menu</button>
             <button style={styles.button} onClick={() => navigate("/create")}>Create</button>
             <ul style={styles.list}>
                 {sections.map((section) => (
@@ -65,6 +67,24 @@ const TasksAndSections = () => {
                         )}
                     </li>
                 ))}
+                {/* No Section */}
+                <li style={styles.listItem}>
+                    <div style={styles.sectionHeader}>No Section</div>
+                    <ul style={styles.subList}>
+                        {tasks
+                            .filter((task) => task.section_id === null)
+                            .map((task) => (
+                                <li
+                                    key={task.id}
+                                    onClick={() => navigate(`/tasks/${task.id}`)}
+                                    style={{ cursor: "pointer", color: "goldenrod", textDecoration: "underline" }}
+                                >
+                                    <input type="checkbox" style={{ marginRight: "10px" }} />
+                                    {task.content} (Due: {task.due_date || "No due date"})
+                                </li>
+                            ))}
+                    </ul>
+                </li>
             </ul>
         </div>
     );
@@ -85,6 +105,16 @@ const styles = {
         marginBottom: "20px",
         color: "goldenrod", // Updated to match the homepage text color
     },
+    menuButton: {
+        marginBottom: "10px",
+        padding: "10px 20px",
+        fontSize: "16px",
+        border: "none",
+        borderRadius: "5px",
+        backgroundColor: "goldenrod", // Updated to match the homepage button color
+        color: "#1e1e2f", // Updated to match the homepage button text color
+        cursor: "pointer",
+    },
     button: {
         marginBottom: "20px",
         padding: "10px 20px",
@@ -94,9 +124,6 @@ const styles = {
         backgroundColor: "goldenrod", // Updated to match the homepage button color
         color: "#1e1e2f", // Updated to match the homepage button text color
         cursor: "pointer",
-    },
-    buttonHover: {
-        backgroundColor: "#e0b052", // Updated to match the homepage hover effect
     },
     list: {
         listStyleType: "none",

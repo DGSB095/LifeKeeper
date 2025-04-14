@@ -1,8 +1,20 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-//import '../css/tmanager.css'; // Adjust the path as necessary
+import { Link, useNavigate } from 'react-router-dom';
+import { resetTmanager } from '../api'; // Import the reset function
 
 const Home = () => {
+    const navigate = useNavigate(); // Initialize navigate
+
+    const handleReset = async (e) => {
+        e.preventDefault(); // Prevent default link behavior
+        try {
+            await resetTmanager(); // Call the reset function
+            navigate('/tasks'); // Redirect to tasks page
+        } catch (error) {
+            console.error('Failed to reset database:', error);
+        }
+    };
+
     return (
         <div id="root">
             <header>
@@ -15,7 +27,7 @@ const Home = () => {
                     </div>
                     <ul className="nav-links">
                         <li><Link to="/tasks">Open a tmanager</Link></li>
-                        <li><a href="/tasks">Create a new tmanager</a></li>
+                        <li><a onClick={handleReset} href="/tasks">Create a new tmanager</a></li>
                         <li><a href="https://github.com/DGSB095/LifeKeeper/blob/SQL/documentation.md">Documentation</a></li>
                     </ul>
                     <div className="nav-actions">
@@ -36,8 +48,8 @@ const Home = () => {
                         <p className="lifekeeper-p">LifeKeeper is a simple task manager that helps you keep track of your tasks and manage your time effectively.</p>
                     </div>
                     <ul className="vault-nav-actions">
-                        <li><a href="/tasks" className="nav-item"><div className="icon-container"><img className="folder-icon file-icon plus-icon" src="icons/plus.png" alt="Folder Icon" /></div> Create a tmanager</a></li>
-                        <li><a href="tasks/" className="nav-item"><div className="icon-container"><img className="folder-icon file-icon" src="icons/folder.png" alt="Folder Icon" /></div> Open a tmanager</a></li>
+                        <li><a href="/tasks" onClick={handleReset} className="nav-item"><div className="icon-container"><img className="folder-icon file-icon plus-icon" src="icons/plus.png" alt="Folder Icon" /></div> Create a new tmanager</a></li>
+                        <li><a href="tasks/" className="nav-item" onClick={handleReset}><div className="icon-container"><img className="folder-icon file-icon" src="icons/folder.png" alt="Folder Icon" /></div> Create a new tmanager</a></li>
                     </ul>
                 </div>
             </main>

@@ -101,3 +101,35 @@ export const updateTask = async (taskId, tcontent, section_id, due_date, should_
         throw error;
     }
 };
+
+export const deleteTask = async (taskId) => {
+    try {
+        const response = await fetch(`${API_URL}/tasks/${taskId}`, {
+            method: "DELETE",
+        });
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.detail || "Failed to delete task");
+        }
+        return await response.json();
+    } catch (error) {
+        console.error("Error deleting task:", error);
+        throw error;
+    }
+}
+
+export const resetTmanager = async () => {
+    try {
+        const response = await fetch(`${API_URL}/reset`, {
+            method: "DELETE",
+        });
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.detail || "Failed to reset Tmanager");
+        }
+        return await response.json();
+    } catch (error) {
+        console.error("Error resetting Tmanager:", error);
+        throw error;
+    }
+}
